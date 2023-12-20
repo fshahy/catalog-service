@@ -1,16 +1,18 @@
 server:
-  port: 8080
+  port: 8081
   host: 0.0.0.0
 
 app:
-    greeting: "Hello"
+    name: "catalog-service"
 
 db:
+  init-schema: true
+  init-data: true
   source: jdbc
   connection:
-    url: jdbc:mysql://127.0.0.1:3306/pokemon?useSSL=false
-    username: user
-    password: password
+    url: jdbc:mysql://127.0.0.1:6603/catalog-service-db?useSSL=false
+    username: root
+    password: root
     initializationFailTimeout: -1
     connectionTimeout: 2000
   health-check:
@@ -18,16 +20,18 @@ db:
     statementName: "health-check"
   statements:
     health-check: "SELECT 0"
-    create-types: "CREATE TABLE PokeTypes (id INTEGER NOT NULL PRIMARY KEY, name VARCHAR(64) NOT NULL)"
-    create-pokemons: "CREATE TABLE Pokemons (id INTEGER NOT NULL PRIMARY KEY, name VARCHAR(64) NOT NULL, id_type INTEGER NOT NULL REFERENCES PokeTypes(id))"
-    select-all-types: "SELECT id, name FROM PokeTypes"
-    select-all-pokemons: "SELECT id, name, id_type FROM Pokemons"
-    select-pokemon-by-id: "SELECT id, name, id_type FROM Pokemons WHERE id = :id"
-    select-pokemon-by-name: "SELECT id, name, id_type FROM Pokemons WHERE name = ?"
-    insert-type: "INSERT INTO PokeTypes(id, name) VALUES(?, ?)"
-    insert-pokemon: "INSERT INTO Pokemons(id, name, id_type) VALUES(?, ?, ?)"
-    update-pokemon-by-id: "UPDATE Pokemons SET name = :name, id_type = :idType WHERE id = :id"
-    delete-pokemon-by-id: "DELETE FROM Pokemons WHERE id = :id"
-    delete-all-types: "DELETE FROM PokeTypes"
-    delete-all-pokemons: "DELETE FROM Pokemons"
+    create-table-product-categories: "CREATE TABLE product_categories (
+      id int(11) NOT NULL AUTO_INCREMENT,
+      name varchar(45) NOT NULL,
+      PRIMARY KEY (id)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4"
+    insert-product-category: "INSERT INTO product_categories(id, name) VALUES (?, ?)"
+    create-table-products: "CREATE TABLE products (
+      id int(11) NOT NULL AUTO_INCREMENT,
+      name varchar(45) NOT NULL,
+      category_id int(11) NOT NULL,
+      PRIMARY KEY (id),
+      KEY fk_products_category_fk_idx (category_id),
+      CONSTRAINT fk_products_category_fk FOREIGN KEY (category_id) REFERENCES product_categories (id)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4"
 

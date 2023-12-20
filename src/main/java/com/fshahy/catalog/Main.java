@@ -9,6 +9,9 @@ import io.helidon.webserver.http.HttpRouting;
 import io.helidon.webserver.observe.ObserveFeature;
 import io.helidon.webserver.observe.health.HealthObserver;
 import io.helidon.dbclient.health.DbClientHealthCheck;
+
+import com.fshahy.catalog.services.ProductCategoryService;
+
 import io.helidon.common.context.Contexts;
 import io.helidon.dbclient.DbClient;
 
@@ -72,8 +75,6 @@ public class Main {
      */
     static void routing(HttpRouting.Builder routing) {
         routing
-               .register("/greet", new GreetService())
-               .register("/db", new PokemonService())
-               .get("/simple-greet", (req, res) -> res.send("Hello World!")); 
+                .register("/categories", new ProductCategoryService());
     }
 }

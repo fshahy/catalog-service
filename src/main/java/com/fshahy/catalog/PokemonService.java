@@ -48,8 +48,8 @@ public class PokemonService implements HttpService {
                 .get(DbClient.class)
                 .orElseGet(() -> DbClient.create(config));
 
-        initSchema = config.get("init-schema").asBoolean().orElse(true);
-        initData = config.get("init-data").asBoolean().orElse(true);
+        initSchema = false; //config.get("init-schema").asBoolean().orElse(true);
+        initData = false; //config.get("init-data").asBoolean().orElse(true);
         init();
     }
 
